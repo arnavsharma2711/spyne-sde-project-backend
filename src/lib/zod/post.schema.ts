@@ -5,9 +5,22 @@ export const postSchema = z.object({
   hashtags: z.array(z.string()),
 });
 
+export const postIdSchema = z.object({
+  post_id: z.number(),
+});
+
 export const fetchPostSchema = z.object({
   id: z.number(),
   description: z.string(),
-  author_id: z.number(),
+  user_id: z.number(),
   view_count: z.number(),
+});
+
+export const postSearchParamsSchema = z.object({
+  q: z.string().optional(),
+  hashtags: z.array(z.string()).optional(),
+  page: z.number().optional(),
+  limit: z.number().optional(),
+  sort_by: z.enum(['id', 'full_name', 'email', 'phone_number', 'created_at', 'updated_at']).optional(),
+  order_by: z.enum(['asc', 'desc']).optional(),
 });

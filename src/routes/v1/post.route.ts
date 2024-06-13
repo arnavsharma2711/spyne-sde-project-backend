@@ -3,7 +3,7 @@ import { createPost } from '../../controllers/v1/post.controller';
 
 const postRouter = express.Router();
 
-// POST /api/v1/auth/register
+// POST /api/v1/post/
 postRouter.post('/', createPost);
 
 export default postRouter;
