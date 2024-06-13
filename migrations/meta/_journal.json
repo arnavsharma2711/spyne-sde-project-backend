@@ -8,6 +8,20 @@
       "when": 1718272791173,
       "tag": "0000_wandering_night_nurse",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1718298911931,
+      "tag": "0001_cool_jubilee",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1718298974016,
+      "tag": "0002_dark_xorn",
+      "breakpoints": true
     }
   ]
 }

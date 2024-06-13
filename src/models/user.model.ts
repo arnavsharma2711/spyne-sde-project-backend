@@ -1,8 +1,10 @@
-import { eq, like, or } from 'drizzle-orm';
+import { count, desc, eq, like, or } from 'drizzle-orm';
 import { users as User } from '../lib/db/schema';
 import databaseInstance from '../lib/db';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { CustomError } from '../lib/error/custom.error';
+import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from '../constants';
 
 export const findUserById = async (id: number) => {
   const user = await databaseInstance.select().from(User).where(eq(User.id, id)).limit(1);
@@ -24,7 +26,7 @@ export const validUserAndPassword = async (email: string, password: string) => {
   return user;
 };
 
-export const createNewUser = async (full_name: string, email: string, password: string, phone_number: string) => {
+export const createUser = async (full_name: string, email: string, password: string, phone_number: string) => {
   const values = {
     full_name,
     email,
@@ -39,7 +41,7 @@ export const createNewUser = async (full_name: string, email: string, password: 
   return newUser[0];
 };
 
-export const updateUserInfo = async (id: number, full_name: string, email: string, phone_number: string) => {
+export const updateUser = async (id: number, full_name: string, email: string, phone_number: string) => {
   const values = {
     full_name,
     email,
@@ -55,30 +57,50 @@ export const updateUserInfo = async (id: number, full_name: string, email: strin
   return updatedUser[0];
 };
 
-export const updateUserPassword = async (userId: number, oldPassword: string, newPassword: string) => {
+export const updateUserPassword = async (userId: number, old_password: string, new_password: string) => {
   const user = await findUserById(userId);
-  const passwordMatch = user.encrypted_password ? bcrypt.compareSync(oldPassword, user.encrypted_password) : false;
+  const passwordMatch = user.encrypted_password ? bcrypt.compareSync(old_password, user.encrypted_password) : false;
   if (!passwordMatch) throw new CustomError(401, 'Authentication Error', 'Old Password is incorrect!');
 
   await databaseInstance
     .update(User)
-    .set({ encrypted_password: bcrypt.hashSync(newPassword, 10) })
+    .set({ encrypted_password: bcrypt.hashSync(new_password, 10) })
     .where(eq(User.id, userId))
     .returning();
 
   return true;
 };
 
-export const deleteExistingUser = async (id: number) => {
+export const deleteUser = async (id: number) => {
   await databaseInstance.delete(User).where(eq(User.id, id));
   return true;
 };
 
-export const searchAllUsers = async (search: string) => {
-  console.log('search', search);
+export const searchUsers = async (q: string | null, offset: number, pageLimit: number) => {
   const users = await databaseInstance
     .select()
     .from(User)
-    .where(or(like(User.full_name, `%${search}%`), like(User.email, `%${search}%`), like(User.phone_number, `%${search}%`)));
+    .where(or(like(User.full_name, `%${q}%`), like(User.email, `%${q}%`), like(User.phone_number, `%${q}%`)))
+    .limit(pageLimit)
+    .offset(offset)
+    .orderBy(desc(User.id));
+
   return users;
+};
+
+export const getSearchUsersCount = async (q: string | null) => {
+  const userCount = await databaseInstance
+    .select({ count: count() })
+    .from(User)
+    .where(or(like(User.full_name, `%${q}%`), like(User.email, `%${q}%`), like(User.phone_number, `%${q}%`)));
+  return userCount[0].count;
+};
+
+export const generateUserToken = async (user: any) => {
+  const access_token_payload = { id: user.id, display_name: user.display_name, email: user.email, username: user.username };
+  const access_token = jwt.sign(access_token_payload, ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+  const refresh_token = jwt.sign({ id: user.id }, REFRESH_TOKEN_SECRET, { expiresIn: '6h' });
+
+  await databaseInstance.update(User).set({ access_token: access_token, refresh_token: refresh_token }).where(eq(User.id, user.id));
+  return { access_token, refresh_token };
 };

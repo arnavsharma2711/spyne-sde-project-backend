@@ -3,11 +3,15 @@ import { ZodError } from 'zod';
 import build_response from './response/MessageResponse';
 import { CustomError } from './error/custom.error';
 
+interface UserRequest extends Request {
+  user?: any;
+}
+
 // eslint-disable-next-line no-unused-vars
-type ControllerFunction = (req: Request, res: Response, next: NextFunction) => Promise<void>;
+type ControllerFunction = (req: UserRequest, res: Response, next: NextFunction) => Promise<void>;
 
 export const controllerWrapper = (fn: ControllerFunction): ControllerFunction => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (req: UserRequest, res: Response, next: NextFunction) => {
     try {
       await fn(req, res, next);
     } catch (error: Error | any) {

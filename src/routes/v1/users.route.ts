@@ -1,19 +1,31 @@
 import express from 'express';
-import { createUser, deleteUser, followUser, getUser, searchUsers, unFollowUser, updateUser } from '../../controllers/v1/user.controller';
+import {
+  deleteUser,
+  followUser,
+  getCurrentUser,
+  getUser,
+  searchUsers,
+  unFollowUser,
+  updateUser,
+  updateUserPassword,
+} from '../../controllers/v1/user.controller';
 
 const userRouter = express.Router();
-
-// POST /api/v1/user/register
-userRouter.post('/register', createUser);
 
 // PUT /api/v1/user/update
 userRouter.put('/update', updateUser);
 
-// DELETE /api/v1/user/delete
-userRouter.delete('/delete', deleteUser);
+// PATCH
+userRouter.patch('/password', updateUserPassword);
+
+// DELETE /api/v1/user
+userRouter.delete('/', deleteUser);
 
 // GET /api/v1/user/:id
 userRouter.get('/:id', getUser);
+
+// GET /api/v1/user/
+userRouter.get('/', getCurrentUser);
 
 // GET /api/v1/user/search/:q
 userRouter.get('/search/:q', searchUsers);

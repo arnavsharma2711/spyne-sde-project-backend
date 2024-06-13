@@ -1,4 +1,4 @@
-import { serial, pgTable, text, timestamp, varchar, pgEnum, uniqueIndex, integer } from 'drizzle-orm/pg-core';
+import { serial, pgTable, text, timestamp, varchar, pgEnum, uniqueIndex, integer, index } from 'drizzle-orm/pg-core';
 
 //Enums
 export const userStatus = pgEnum('user-status', ['public', 'private']);
@@ -22,7 +22,7 @@ export const users = pgTable(
     return {
       usersEmailIdx: uniqueIndex('users_email_idx').on(users.email),
       usersPhoneNumberIndex: uniqueIndex('users_phone_number_idx').on(users.phone_number),
-      usersFullNameIndex: uniqueIndex('users_full_name_idx').on(users.full_name),
+      usersFullNameIndex: index('users_full_name_idx').on(users.full_name),
     };
   },
 );
