@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1718272791173,
+      "tag": "0000_wandering_night_nurse",
+      "breakpoints": true
+    }
+  ]
+}
