@@ -1,6 +1,6 @@
 {
-  "id": "8da3980f-450d-44c5-8ba4-5687256acb4a",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "e5696506-6fb3-4dd2-bebd-cd12afef25c6",
+  "prevId": "8da3980f-450d-44c5-8ba4-5687256acb4a",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -624,7 +624,7 @@
               "nulls": "last"
             }
           ],
-          "isUnique": true,
+          "isUnique": false,
           "concurrently": false,
           "method": "btree",
           "with": {}
