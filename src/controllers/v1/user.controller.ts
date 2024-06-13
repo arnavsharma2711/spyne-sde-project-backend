@@ -1,8 +1,9 @@
 import { controllerWrapper } from '../../lib/controllerWrapper';
 import build_response from '../../lib/response/MessageResponse';
-import { createUserSchema, updateUserInfoSchema, userIdSchema, userSearchParamsSchema } from '../../lib/zod/user.schema';
+import { createUserSchema, updateUserInfoSchema, userFollowSchema, userIdSchema, userSearchParamsSchema } from '../../lib/zod/user.schema';
 import { createNewUser, deleteExistingUser, findUserById, searchAllUsers, updateUserInfo } from '../../model/user.model';
 import { userInfoSchema } from '../../lib/zod/common.schema';
+import { addFollower, removeFollower } from '../../model/follower_mappings.model';
 
 export const createUser = controllerWrapper(async (req, res) => {
   const { full_name, email, phone_number, password } = createUserSchema.parse(req.body);
@@ -47,4 +48,23 @@ export const searchUsers = controllerWrapper(async (req, res) => {
 
   const userInfo = userInfoSchema.array().parse(users);
   res.status(200).json(build_response(true, 'Users fetched successfully!', null, userInfo.length > 0 ? userInfo.length : null, userInfo));
+});
+
+export const followUser = controllerWrapper(async (req, res) => {
+  const { following_user_id } = userFollowSchema.parse(req.params);
+  // const current_user_id = req.user.id;
+  const current_user_id = 1;
+
+  await addFollower(following_user_id, current_user_id);
+
+  res.status(200).json(build_response(true, 'Follower added successfully!', null, null, null));
+});
+
+export const unFollowUser = controllerWrapper(async (req, res) => {
+  const { following_user_id } = userFollowSchema.parse(req.params);
+  // const current_user_id = req.user.id;
+  const current_user_id = 1;
+
+  await removeFollower(following_user_id, current_user_id);
+  res.status(200).json(build_response(true, 'Follower removed successfully!', null, null, null));
 });

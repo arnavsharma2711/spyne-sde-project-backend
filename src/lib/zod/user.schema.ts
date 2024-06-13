@@ -27,6 +27,10 @@ export const userIdSchema = z.object({
   id: z.number(),
 });
 
+export const userFollowSchema = z.object({
+  following_user_id: z.string().transform(Number),
+});
+
 export const userSearchParamsSchema = z.object({
   q: z.string(),
   page: z.number().optional(),

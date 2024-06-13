@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUser, deleteUser, getUser, searchUsers, updateUser } from '../../controllers/v1/user.controller';
+import { createUser, deleteUser, followUser, getUser, searchUsers, unFollowUser, updateUser } from '../../controllers/v1/user.controller';
 
 const userRouter = express.Router();
 
@@ -16,6 +16,12 @@ userRouter.delete('/delete', deleteUser);
 userRouter.get('/:id', getUser);
 
 // GET /api/v1/user/search/:q
-userRouter.get('/search/:search_query', searchUsers);
+userRouter.get('/search/:q', searchUsers);
+
+// POST /api/v1/user/:id/follow
+userRouter.post('/:following_user_id/follow', followUser);
+
+// POST /api/v1/user/:id/follow
+userRouter.delete('/:following_user_id/follow', unFollowUser);
 
 export default userRouter;
