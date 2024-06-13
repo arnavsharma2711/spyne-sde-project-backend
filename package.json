@@ -11,7 +11,7 @@
     "database": "docker compose -f docker-compose.yaml up",
     "lint": "eslint src/**/*.ts --fix",
     "test": "jest",
-    "migration:generate": "drizzle-kit generate:pg",
+    "migration:generate": "drizzle-kit generate",
     "migration:push": "node -r esbuild-register src/lib/db/migrate.ts",
     "studio": "drizzle-kit studio",
     "typecheck": "tsc --noEmit",
