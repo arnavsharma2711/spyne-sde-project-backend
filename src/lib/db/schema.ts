@@ -41,7 +41,7 @@ export const posts = pgTable(
   },
   (posts) => {
     return {
-      postsUserIdIdx: uniqueIndex('posts_user_id_idx').on(posts.user_id),
+      postsUserIdIdx: index('posts_user_id_idx').on(posts.user_id),
     };
   },
 );
@@ -70,6 +70,8 @@ export const comments = pgTable(
   },
 );
 
+export const reactionEnum = pgEnum('reaction_type_enum', ['like', 'dislike']);
+
 export const reactions = pgTable(
   'reactions',
   {
@@ -79,14 +81,19 @@ export const reactions = pgTable(
       .references(() => users.id),
     entity_type: text('entity_type').notNull(),
     entity_id: serial('entity_id').notNull(),
+    reaction_type: reactionEnum('reaction_type_enum').notNull(),
     created_at: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
     updated_at: timestamp('updated_at', { mode: 'date' }).notNull().defaultNow(),
   },
   (reactions) => {
     return {
-      reactionsUserIdIndex: uniqueIndex('reactions_user_id_idx').on(reactions.user_id),
-      reactionsEntityTypeIndex: uniqueIndex('reactions_entity_type_idx').on(reactions.entity_type),
-      reactionsEntityIdIndex: uniqueIndex('reactions_entity_id_idx').on(reactions.entity_id),
+      reactionsUserIdIndex: index('reactions_user_id_idx').on(reactions.user_id),
+      reactionsEntityTypeEntityIdIndex: index('reactions_entity_type_entity_id_idx').on(reactions.entity_type, reactions.entity_id),
+      reactionsEntityTypeEntityIdReactionTypeIndex: index('reactions_entity_type_entity_id_reaction_type_idx').on(
+        reactions.entity_type,
+        reactions.entity_id,
+        reactions.reaction_type,
+      ),
     };
   },
 );
@@ -121,8 +128,8 @@ export const hashtag_mappings = pgTable(
   },
   (hashtag_mappings) => {
     return {
-      hashtagMappingsPostIdIndex: uniqueIndex('hashtag_mappings_post_id_idx').on(hashtag_mappings.post_id),
-      hashtagMappingsHashtagIdIndex: uniqueIndex('hashtag_mappings_hashtag_id_idx').on(hashtag_mappings.hashtag_id),
+      hashtagMappingsPostIdIndex: index('hashtag_mappings_post_id_idx').on(hashtag_mappings.post_id),
+      hashtagMappingsHashtagIdIndex: index('hashtag_mappings_hashtag_id_idx').on(hashtag_mappings.hashtag_id),
     };
   },
 );

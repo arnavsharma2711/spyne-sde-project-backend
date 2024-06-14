@@ -16,7 +16,7 @@ import {
 // POST /api/v1/user/update
 export const updateUser = controllerWrapper(async (req, res) => {
   const { full_name, email, phone_number } = updateUserInfoSchema.parse(req.body);
-  console.log(req.user);
+
   const userDetails = await updateUserInfo(req.user.id, full_name, email, phone_number);
 
   const userInfo = userInfoSchema.parse(userDetails);
