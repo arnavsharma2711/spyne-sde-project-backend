@@ -19,5 +19,5 @@ postRouter.get('/:post_id', getPost);
 postRouter.post('/:post_id/like', likePost);
 
 // POST /api/v1/post/:id/unlike
-postRouter.post('/:post_id/unlike', unLikePost);
+postRouter.delete('/:post_id/like', unLikePost);
 export default postRouter;
