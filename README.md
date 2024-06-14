@@ -3,6 +3,14 @@
 ## Overview
 
 This repository contains the backend code for the SDE 1 project submission for SPYNE, developed by Arnav Sharma. The project is primarily written in TypeScript, with some HTML and JavaScript components. The project setup includes various configurations for linting, testing, and containerization.
+The Spyne SDE Project Backend is a server-side application designed to handle and process requests for the Spyne project. It provides a set of APIs to manage and interact with the application's data and services.
+
+## Features
+- RESTful API endpoints for managing resources
+- Authentication and authorization mechanisms
+- Integration with a database for persistent storage
+- Error handling and logging
+- Scalable and modular architecture
 
 ## Repository Structure
 
@@ -92,8 +100,8 @@ spyne-sde-project-backend/
 ## Technologies Used
 
 - **Language**: TypeScript
-- **Database**: (Specify database if any)
+- **Environment**: Node
+- **Framework**: Express
+- **Database**: PostgreSQL
 - **ORM**: Drizzle
-- **Testing**: Jest
-- **Containerization**: Docker
 - **Deployment**: Vercel

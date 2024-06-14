@@ -60,10 +60,30 @@ export const likeComment = async (user_id: number, comment_id: number) => {
   const comment = await findCommentById(comment_id);
   if (!comment) throw new CustomError(404, 'Like Error', 'Comment not found!');
 
+  const isAlreadyLiked = await databaseInstance
+    .select()
+    .from(Reaction)
+    .where(
+      and(eq(Reaction.user_id, user_id), eq(Reaction.entity_type, 'Comment'), eq(Reaction.entity_id, comment_id), eq(Reaction.reaction_type, 'like')),
+    );
+
+  if (isAlreadyLiked.length > 0) {
+    throw new CustomError(400, 'Like Error', 'You have already liked this post!');
+  }
+
   await databaseInstance.insert(Reaction).values({ user_id, entity_type: 'Comment', entity_id: comment_id, reaction_type: 'like' });
 };
 
 export const unLikeComment = async (user_id: number, comment_id: number) => {
+  const isLiked = await databaseInstance
+    .select()
+    .from(Reaction)
+    .where(
+      and(eq(Reaction.user_id, user_id), eq(Reaction.entity_type, 'Comment'), eq(Reaction.entity_id, comment_id), eq(Reaction.reaction_type, 'like')),
+    );
+
+  if (isLiked.length === 0) throw new CustomError(400, 'Like Error', 'You have not liked this post!');
+
   await databaseInstance
     .delete(Reaction)
     .where(

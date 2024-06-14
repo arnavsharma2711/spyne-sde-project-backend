@@ -86,10 +86,26 @@ export const likePost = async (user_id: number, post_id: number) => {
     throw new CustomError(404, 'Like Error', 'Post not found!');
   }
 
+  const isAlreadyLiked = await databaseInstance
+    .select()
+    .from(Reaction)
+    .where(and(eq(Reaction.user_id, user_id), eq(Reaction.entity_type, 'Post'), eq(Reaction.entity_id, post_id), eq(Reaction.reaction_type, 'like')));
+
+  if (isAlreadyLiked.length > 0) {
+    throw new CustomError(400, 'Like Error', 'You have already liked this post!');
+  }
+
   await databaseInstance.insert(Reaction).values({ user_id, entity_type: 'Post', entity_id: post_id, reaction_type: 'like' });
 };
 
 export const unLikePost = async (user_id: number, post_id: number) => {
+  const isLiked = await databaseInstance
+    .select()
+    .from(Reaction)
+    .where(and(eq(Reaction.user_id, user_id), eq(Reaction.entity_type, 'Post'), eq(Reaction.entity_id, post_id), eq(Reaction.reaction_type, 'like')));
+
+  if (isLiked.length === 0) throw new CustomError(400, 'Like Error', 'You have not liked this post!');
+
   await databaseInstance
     .delete(Reaction)
     .where(and(eq(Reaction.user_id, user_id), eq(Reaction.entity_type, 'Post'), eq(Reaction.entity_id, post_id), eq(Reaction.reaction_type, 'like')));

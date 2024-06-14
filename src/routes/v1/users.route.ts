@@ -1,21 +1,12 @@
 import express from 'express';
-import {
-  deleteUser,
-  followUser,
-  getCurrentUser,
-  getUser,
-  searchUsers,
-  unFollowUser,
-  updateUser,
-  updateUserPassword,
-} from '../../controllers/v1/user.controller';
+import { deleteUser, followUser, getCurrentUser, getUser, unFollowUser, updateUser, updateUserPassword } from '../../controllers/v1/user.controller';
 
 const userRouter = express.Router();
 
 // PUT /api/v1/user/update
 userRouter.put('/update', updateUser);
 
-// PATCH
+// PATCH /api/v1/user/password
 userRouter.patch('/password', updateUserPassword);
 
 // DELETE /api/v1/user
@@ -26,9 +17,6 @@ userRouter.get('/:id', getUser);
 
 // GET /api/v1/user/
 userRouter.get('/', getCurrentUser);
-
-// GET /api/v1/user/search/:q
-userRouter.get('/search/:q', searchUsers);
 
 // POST /api/v1/user/:id/follow
 userRouter.post('/:following_user_id/follow', followUser);
