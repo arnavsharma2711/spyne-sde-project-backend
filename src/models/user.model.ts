@@ -16,6 +16,11 @@ export const findUserByEmail = async (email: string) => {
   return user[0];
 };
 
+export const findUserByPhoneNumber = async (phone_number: string) => {
+  const user = await databaseInstance.select().from(User).where(eq(User.phone_number, phone_number)).limit(1);
+  return user[0];
+};
+
 export const validUserAndPassword = async (email: string, password: string) => {
   const user = await findUserByEmail(email);
   if (!user) throw new CustomError(404, 'Authentication Error', 'Invalid credentials!');
@@ -42,6 +47,13 @@ export const createUser = async (full_name: string, email: string, password: str
 };
 
 export const updateUser = async (id: number, full_name: string, email: string, phone_number: string) => {
+  const existing_email = await findUserByEmail(email);
+  if (existing_email && existing_email.id !== id) throw new CustomError(409, 'Conflict Error', 'User with this email already exists!');
+
+  const existing_phone_number = await findUserByPhoneNumber(phone_number);
+  if (existing_phone_number && existing_phone_number.id !== id)
+    throw new CustomError(409, 'Conflict Error', 'User with this phone number already exists!');
+
   const values = {
     full_name,
     email,
