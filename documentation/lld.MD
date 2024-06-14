@@ -52,7 +52,7 @@
 8. **Deployment**
    - **Purpose**: Manage deployment configuration.
    - **Components**:
-     - **Docker Configuration**: Containerization setup.
+     - **Docker Configuration**: Containerization setup for local database.
      - **Vercel Configuration**: Deployment settings for Vercel.
 
 ### System Architecture Diagram

@@ -13,8 +13,3 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=s3cret123
 
-  adminer:
-    image: adminer:4.8.1
-    restart: always
-    ports:
-      - 8080:8080
