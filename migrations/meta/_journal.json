@@ -50,6 +50,20 @@
       "when": 1718306535633,
       "tag": "0006_talented_lake",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1718348275514,
+      "tag": "0007_light_maggott",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1718348311121,
+      "tag": "0008_ordinary_randall",
+      "breakpoints": true
     }
   ]
 }

@@ -63,9 +63,9 @@ export const comments = pgTable(
   },
   (comments) => {
     return {
-      commentsUserIdIndex: uniqueIndex('comments_user_id_idx').on(comments.user_id),
-      commentsPostIdIndex: uniqueIndex('comments_post_id_idx').on(comments.post_id),
-      commentsParentIdIndex: uniqueIndex('comments_parent_id_idx').on(comments.parentId),
+      commentsUserIdIndex: index('comments_user_id_idx').on(comments.user_id),
+      commentsPostIdIndex: index('comments_post_id_idx').on(comments.post_id),
+      commentsParentIdIndex: index('comments_parent_id_idx').on(comments.parentId),
     };
   },
 );
@@ -149,8 +149,8 @@ export const follower_mappings = pgTable(
   },
   (follower_mappings) => {
     return {
-      followerMappingsFollowerIdIndex: uniqueIndex('follower_mappings_follower_id_idx').on(follower_mappings.follower_id),
-      followerMappingsFollowingIdIndex: uniqueIndex('follower_mappings_following_id_idx').on(follower_mappings.following_id),
+      followerMappingsFollowerIdIndex: index('follower_mappings_follower_id_idx').on(follower_mappings.follower_id),
+      followerMappingsFollowingIdIndex: index('follower_mappings_following_id_idx').on(follower_mappings.following_id),
     };
   },
 );
