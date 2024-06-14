@@ -6,7 +6,7 @@ export const fetchPost = async (post_id: number) => {
   return post;
 };
 
-export const createNewPost = async (user_id: number, description: string, hashtags: string[]) => {
+export const createNewPost = async (user_id: number, description: string, hashtags: string[] = []) => {
   const fetched_hashtags = await fetchOrCreateHashtags(hashtags);
   const hashtags_ids = fetched_hashtags.map((hashtag) => hashtag.id) || [];
 
@@ -14,7 +14,7 @@ export const createNewPost = async (user_id: number, description: string, hashta
   return post;
 };
 
-export const updateExistingPost = async (user_id: number, post_id: number, description: string, hashtags: string[]) => {
+export const updateExistingPost = async (user_id: number, post_id: number, description: string, hashtags: string[] = []) => {
   const fetched_hashtags = await fetchOrCreateHashtags(hashtags);
   const hashtags_ids = fetched_hashtags.map((hashtag) => hashtag.id) || [];
 

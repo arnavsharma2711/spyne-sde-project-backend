@@ -14,7 +14,7 @@ export const createPost = async (user_id: number, description: string, hashtags_
     const post = await transaction
       .insert(Post)
       .values(values)
-      .returning({ id: Post.id, description: Post.text, author_id: Post.user_id, view_count: Post.view_count });
+      .returning({ id: Post.id, description: Post.text, user_id: Post.user_id, view_count: Post.view_count });
 
     const hashtagMappingsValues = hashtags_ids.map((hashtag_id) => ({ hashtag_id, post_id: post[0].id }));
     await transaction.insert(HashtagMappings).values(hashtagMappingsValues);
@@ -26,7 +26,8 @@ export const createPost = async (user_id: number, description: string, hashtags_
 
 export const updatePost = async (user_id: number, post_id: number, description: string, hashtags_ids: number[] | []) => {
   const post = await findPostById(post_id);
-  if (post.author_id !== user_id) {
+  if (!post) throw new CustomError(404, 'Update Error', 'Post not found!');
+  if (post.user_id !== user_id) {
     throw new CustomError(401, 'Authentication Error', 'You are not authorized to delete this post!');
   }
 
@@ -39,7 +40,7 @@ export const updatePost = async (user_id: number, post_id: number, description: 
       .update(Post)
       .set(values)
       .where(eq(Post.id, post_id))
-      .returning({ id: Post.id, description: Post.text, author_id: Post.user_id, view_count: Post.view_count });
+      .returning({ id: Post.id, description: Post.text, user_id: Post.user_id, view_count: Post.view_count });
 
     await transaction.delete(HashtagMappings).where(eq(HashtagMappings.post_id, post_id));
 
@@ -54,7 +55,7 @@ export const updatePost = async (user_id: number, post_id: number, description: 
 
 export const findPostById = async (post_id: number, with_hashtags: boolean = false) => {
   let query = databaseInstance
-    .select({ id: Post.id, description: Post.text, author_id: Post.user_id, view_count: Post.view_count })
+    .select({ id: Post.id, description: Post.text, user_id: Post.user_id, view_count: Post.view_count })
     .from(Post)
     .where(eq(Post.id, post_id));
 
@@ -66,9 +67,9 @@ export const findPostById = async (post_id: number, with_hashtags: boolean = fal
   return post[0];
 };
 
-export const deletePost = async (post_id: number, user_id: number) => {
+export const deletePost = async (user_id: number, post_id: number) => {
   const post = await findPostById(post_id);
-  if (post.author_id !== user_id) {
+  if (post.user_id !== user_id) {
     throw new CustomError(401, 'Authentication Error', 'You are not authorized to delete this post!');
   }
 

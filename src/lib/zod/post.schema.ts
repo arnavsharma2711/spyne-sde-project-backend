@@ -2,11 +2,11 @@ import { z } from 'zod';
 
 export const postSchema = z.object({
   text: z.string(),
-  hashtags: z.array(z.string()),
+  hashtags: z.array(z.string()).optional(),
 });
 
 export const postIdSchema = z.object({
-  post_id: z.number(),
+  post_id: z.string().transform(Number),
 });
 
 export const fetchPostSchema = z.object({
